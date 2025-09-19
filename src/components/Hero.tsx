@@ -1,7 +1,8 @@
-import React from 'react';
-import { Play, Instagram, Music2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Play, Instagram, Music2, X } from 'lucide-react';
 
 const Hero: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -10,7 +11,7 @@ const Hero: React.FC = () => {
           <div className="flex items-center justify-center gap-4 md:gap-8">
             {/* Instagram Icon - Left */}
             <a
-              href="https://www.instagram.com/yonoyono"
+              href="https://www.instagram.com/yogeshyono"
               target="_blank"
               rel="noopener noreferrer"
               className="glass-card p-4 rounded-full border border-white/20 hover:border-purple-400/60 transition-all duration-300 group hover:scale-110"
@@ -19,23 +20,24 @@ const Hero: React.FC = () => {
             </a>
 
             {/* Profile Image */}
+            <div className="absolute bottom-2 left-1/2 transform translate-x-16 sm:translate-x-20 md:translate-x-20 lg:translate-x-14 w-6 h-6 bg-green-400 rounded-full animate-pulse border-2 border-white z-[9999] " style={{boxShadow: '0 0 20px rgba(74, 222, 128, 0.6), 0 0 40px rgba(74, 222, 128, 0.3)'}}></div>
 
-            <div className="absolute bottom-5 left-[400px] w-6 h-6 bg-green-400 rounded-full animate-pulse border-2 border-white z-[9999]" style={{boxShadow: '0 0 20px rgba(74, 222, 128, 0.6), 0 0 40px rgba(74, 222, 128, 0.3)'}}></div>
-
-            <div className="w-48 h-48 glass-card rounded-full p-2 overflow-hidden relative">
+            <div 
+              className="w-48 h-48 glass-card rounded-full p-2 overflow-hidden relative cursor-pointer transition-transform duration-300 hover:scale-110 group"
+              onClick={() => setIsModalOpen(true)}
+            >
               <div className="w-full h-full rounded-full overflow-hidden">
                 <img
                   src="https://i1.sndcdn.com/avatars-yvE7sAbKlVFahbFW-UtCRng-t1080x1080.jpg"
                   alt="YONO Artist Photo"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-
             </div>
             
             {/* SoundCloud Icon - Right */}
             <a
-              href="https://soundcloud.com/yonoyono"
+              href="https://soundcloud.com/yogeshyono"
               target="_blank"
               rel="noopener noreferrer"
               className="glass-card p-4 rounded-full border border-white/20 hover:border-orange-400/60 transition-all duration-300 group hover:scale-110"
@@ -49,7 +51,7 @@ const Hero: React.FC = () => {
         <div className="glass-card p-8 md:p-12 rounded-3xl border border-white/20 max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="bg-gradient-to-r from-purple-400 via-teal-400 to-orange-400 bg-clip-text text-transparent animate-gradient" style={{WebkitTextStroke: '0.5px white'}}>
-              YONO
+              YOGESH
             </span>
           </h1>
           
@@ -84,6 +86,37 @@ const Hero: React.FC = () => {
           <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
+
+      {/* Modal pour la photo en grand */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div className="relative max-w-2xl max-h-[90vh] p-4">
+            {/* Bouton de fermeture */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute -top-2 -right-2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors z-[10001]"
+            >
+              <X size={24} />
+            </button>
+            
+            {/* Photo en grand */}
+            <div className="glass-card rounded-3xl p-4 border border-white/20">
+              <img
+                src="https://i1.sndcdn.com/avatars-yvE7sAbKlVFahbFW-UtCRng-t1080x1080.jpg"
+                alt="YONO Artist Photo - Full Size"
+                className="w-full h-full object-cover rounded-2xl max-w-lg max-h-lg"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+            
+            {/* Point vert sur la photo en grand */}
+            <div className="absolute bottom-8 right-8 w-8 h-8 bg-green-400 rounded-full animate-pulse border-3 border-white z-[10001]" style={{boxShadow: '0 0 30px rgba(74, 222, 128, 0.8), 0 0 60px rgba(74, 222, 128, 0.4)'}}></div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
