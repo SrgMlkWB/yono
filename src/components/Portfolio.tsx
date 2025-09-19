@@ -1,82 +1,240 @@
-import React, { useState } from 'react';
-import { Play, ExternalLink, Calendar } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Play, Pause, Volume2 } from 'lucide-react';
 
-interface Project {
+interface Track {
   id: number;
   title: string;
+  artist: string;
+  bpm: string;
+  key: string;
   category: string;
-  date: string;
-  description: string;
-  image: string;
+  audioPath: string;
   tags: string[];
 }
 
 const Portfolio: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<number | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const categories = ['All', 'Singles', 'Remixes', 'Collaborations', 'Albums'];
+  const categories = ['All', 'Solo', 'Collaborations', 'Remixes'];
 
-  const projects: Project[] = [
+  // Vraies musiques du dossier BEATS
+  const tracks: Track[] = [
     {
       id: 1,
-      title: 'Ethereal Dreams',
-      category: 'Singles',
-      date: '2024',
-      description: 'A mesmerizing journey through ambient soundscapes and ethereal melodies.',
-      image: 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
-      tags: ['Ambient', 'Electronic', 'Experimental']
+      title: 'All I Want',
+      artist: 'YOGESH YONO',
+      bpm: '95 BPM',
+      key: 'Dm',
+      category: 'Solo',
+      audioPath: '/BEATS/All I Want - YOGESH YONO - 95BPM, Dm.mp3',
+      tags: ['Emotional', 'Melodic', 'Slow']
     },
     {
       id: 2,
-      title: 'Neon Nights',
-      category: 'Singles',
-      date: '2024',
-      description: 'High-energy electronic track with pulsating beats and neon-soaked atmosphere.',
-      image: 'https://images.pexels.com/photos/2693212/pexels-photo-2693212.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
-      tags: ['Synthwave', 'Electronic', 'Upbeat']
+      title: 'Angels',
+      artist: 'YOGESH YONO',
+      bpm: '150 BPM',
+      key: 'Bm',
+      category: 'Solo',
+      audioPath: '/BEATS/Angels - YOGESH YONO - 150BPM, Bm.mp3',
+      tags: ['Uplifting', 'Electronic', 'Fast']
     },
     {
       id: 3,
-      title: 'Digital Horizon (Remix)',
-      category: 'Remixes',
-      date: '2023',
-      description: 'A reimagined take on the classic, blending modern production with nostalgic elements.',
-      image: 'https://images.pexels.com/photos/1694900/pexels-photo-1694900.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
-      tags: ['Remix', 'Electronic', 'Progressive']
+      title: 'Are You Feelin',
+      artist: 'YOGESH YONO',
+      bpm: '136 BPM',
+      key: 'Am',
+      category: 'Solo',
+      audioPath: '/BEATS/Are You Feelin - YOGESH YONO - 136bpm, Am.mp3',
+      tags: ['Groovy', 'Electronic', 'Mid-tempo']
     },
     {
       id: 4,
-      title: 'Synth Waves Collective',
+      title: 'Believer',
+      artist: 'YOGESH YONO & Tinna',
+      bpm: '161 BPM',
+      key: 'Em',
       category: 'Collaborations',
-      date: '2023',
-      description: 'Collaborative effort with various artists exploring the depths of synthesized music.',
-      image: 'https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
-      tags: ['Collaboration', 'Synth', 'Electronic']
+      audioPath: '/BEATS/Believer - YOGESH YONO & Tinna - 161BPM, Emin.mp3',
+      tags: ['Collaboration', 'High Energy', 'Electronic']
     },
     {
       id: 5,
-      title: 'Cosmic Journey',
-      category: 'Albums',
-      date: '2023',
-      description: 'A complete sonic exploration of space and time through electronic composition.',
-      image: 'https://images.pexels.com/photos/1629212/pexels-photo-1629212.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
-      tags: ['Album', 'Cosmic', 'Ambient', 'Electronic']
+      title: 'Clean Dishes',
+      artist: 'YOGESH YONO',
+      bpm: '98 BPM',
+      key: 'Cm',
+      category: 'Solo',
+      audioPath: '/BEATS/Clean Dishes - YOGESH YONO - 98bpm, Cm.mp3',
+      tags: ['Chill', 'Lo-fi', 'Relaxed']
     },
     {
       id: 6,
-      title: 'Midnight Pulse',
-      category: 'Singles',
-      date: '2022',
-      description: 'Dark and mysterious electronic track perfect for late-night listening sessions.',
-      image: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
-      tags: ['Dark Electronic', 'Minimal', 'Atmospheric']
+      title: 'Dark Side Of High School',
+      artist: 'YOGESH YONO',
+      bpm: '90 BPM',
+      key: 'Dm',
+      category: 'Solo',
+      audioPath: '/BEATS/Dark Side Of High School - YOGESH YONO - 90BPM, Dm.mp3',
+      tags: ['Dark', 'Atmospheric', 'Storytelling']
+    },
+    {
+      id: 7,
+      title: 'Die',
+      artist: 'YOGESH YONO X Tinna',
+      bpm: '136 BPM',
+      key: 'F',
+      category: 'Collaborations',
+      audioPath: '/BEATS/Die - YOGESH YONO X Tinna - 136bpm, Fmajor.mp3',
+      tags: ['Collaboration', 'Intense', 'Electronic']
+    },
+    {
+      id: 8,
+      title: 'Drive',
+      artist: 'YOGESH YONO & Tinna',
+      bpm: '93 BPM',
+      key: 'Fm',
+      category: 'Collaborations',
+      audioPath: '/BEATS/Drive - YOGESH YONO & Tinna, 93BPM, Fmin.mp3',
+      tags: ['Collaboration', 'Smooth', 'Chill']
+    },
+    {
+      id: 9,
+      title: 'First Time',
+      artist: 'YOGESH YONO',
+      bpm: '141 BPM',
+      key: 'G#',
+      category: 'Solo',
+      audioPath: '/BEATS/First Time - YOGESH YONO - 141bpm, G#.mp3',
+      tags: ['Energetic', 'Electronic', 'Upbeat']
+    },
+    {
+      id: 10,
+      title: "I'ts Been A Week",
+      artist: 'YOGESH YONO X Tinna',
+      bpm: '88 BPM',
+      key: 'D#',
+      category: 'Collaborations',
+      audioPath: '/BEATS/I\'ts Been A Week - YOGESH YONO X Tinna - 88bpm, D#.mp3',
+      tags: ['Collaboration', 'Emotional', 'Slow']
+    },
+    {
+      id: 11,
+      title: 'LA Girl',
+      artist: 'YOGESH YONO',
+      bpm: '90 BPM',
+      key: 'F#',
+      category: 'Solo',
+      audioPath: '/BEATS/LA Girl - YOGESH YONO - 90BPM, F#.mp3',
+      tags: ['Chill', 'West Coast', 'Smooth']
+    },
+    {
+      id: 12,
+      title: 'Mommy',
+      artist: 'YOGESH YONO',
+      bpm: '116 BPM',
+      key: 'G#',
+      category: 'Solo',
+      audioPath: '/BEATS/Mommy - YOGESH YONO - 116BPM, G#.mp3',
+      tags: ['Personal', 'Emotional', 'Mid-tempo']
+    },
+    {
+      id: 13,
+      title: 'Race',
+      artist: 'YOGESH YONO',
+      bpm: '169 BPM',
+      key: 'Gm',
+      category: 'Solo',
+      audioPath: '/BEATS/Race - YOGESH YONO - 169BPM, Gmin.mp3',
+      tags: ['Fast', 'High Energy', 'Intense']
+    },
+    {
+      id: 14,
+      title: 'Remember',
+      artist: 'YOGESH YONO',
+      bpm: '132 BPM',
+      key: 'F#',
+      category: 'Solo',
+      audioPath: '/BEATS/Remember - YOGESH YONO - 132BPM, F#.mp3',
+      tags: ['Nostalgic', 'Melodic', 'Electronic']
+    },
+    {
+      id: 15,
+      title: 'Symphony',
+      artist: 'YOGESH YONO',
+      bpm: '147 BPM',
+      key: 'D#',
+      category: 'Solo',
+      audioPath: '/BEATS/Symphony - YOGESH YONO - 147bpm, D#.mp3',
+      tags: ['Orchestral', 'Epic', 'Cinematic']
+    },
+    {
+      id: 16,
+      title: 'Things',
+      artist: 'YOGESH YONO & Tinna',
+      bpm: '169 BPM',
+      key: 'G#',
+      category: 'Collaborations',
+      audioPath: '/BEATS/Things - YOGESH YONO & Tinna - 169BPM, G#.mp3',
+      tags: ['Collaboration', 'Fast', 'Electronic']
+    },
+    {
+      id: 17,
+      title: 'Zone Zone',
+      artist: 'YOGESH YONO',
+      bpm: '152 BPM',
+      key: 'Dm',
+      category: 'Solo',
+      audioPath: '/BEATS/Zone Zone - YOGESH YONO - 152BPM, Dm.mp3',
+      tags: ['Hypnotic', 'Electronic', 'Energetic']
     }
   ];
 
-  const filteredProjects = selectedCategory === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === selectedCategory);
+  const playTrack = async (track: Track) => {
+    if (audioRef.current) {
+      if (currentlyPlaying === track.id && isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        try {
+          // Arrêter la lecture en cours
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+          
+          // Charger la nouvelle piste
+          audioRef.current.src = track.audioPath;
+          audioRef.current.load();
+          
+          // Jouer la piste
+          await audioRef.current.play();
+          setCurrentlyPlaying(track.id);
+          setIsPlaying(true);
+        } catch (error) {
+          console.error('Erreur lors de la lecture audio:', error);
+          console.log('Tentative de lecture du fichier:', track.audioPath);
+          setIsPlaying(false);
+          setCurrentlyPlaying(null);
+        }
+      }
+    }
+  };
+
+  const stopAllTracks = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      setCurrentlyPlaying(null);
+    }
+  };
+
+  const filteredTracks = selectedCategory === 'All' 
+    ? tracks 
+    : tracks.filter(track => track.category === selectedCategory);
 
   return (
     <section id="portfolio" className="py-20 relative">
@@ -110,30 +268,35 @@ const Portfolio: React.FC = () => {
           ))}
         </div>
 
-        {/* Projects Grid */}
+        {/* Tracks Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
+          {filteredTracks.map((track) => (
             <div
-              key={project.id}
+              key={track.id}
               className="glass-card rounded-2xl border border-white/20 overflow-hidden hover:border-white/40 transition-all duration-300 group cursor-pointer"
-              onClick={() => setSelectedProject(project)}
+              onClick={() => setSelectedTrack(track)}
             >
-              <div className="relative overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center gap-2 text-white/80">
-                    <Calendar size={14} />
-                    <span className="text-sm">{project.date}</span>
+              <div className="relative overflow-hidden h-48 bg-gradient-to-br from-purple-500/20 to-teal-500/20 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-teal-500 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <Volume2 size={24} className="text-white" />
                   </div>
+                  <div className="text-white font-semibold text-lg">{track.bpm}</div>
+                  <div className="text-gray-300 text-sm">{track.key}</div>
                 </div>
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                    <Play size={20} className="text-white ml-1" />
+                <div 
+                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playTrack(track);
+                  }}
+                >
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors">
+                    {currentlyPlaying === track.id && isPlaying ? (
+                      <Pause size={20} className="text-white" />
+                    ) : (
+                      <Play size={20} className="text-white ml-1" />
+                    )}
                   </div>
                 </div>
               </div>
@@ -141,21 +304,21 @@ const Portfolio: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-purple-400 font-semibold uppercase tracking-wide">
-                    {project.category}
+                    {track.category}
                   </span>
-                  <ExternalLink size={16} className="text-gray-400 group-hover:text-white transition-colors" />
+                  <span className="text-xs text-gray-400">{track.bpm}</span>
                 </div>
                 
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">
-                  {project.title}
+                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">
+                  {track.title}
                 </h3>
                 
-                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                  {project.description}
+                <p className="text-gray-400 text-sm mb-4">
+                  {track.artist}
                 </p>
                 
                 <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
+                  {track.tags.map((tag) => (
                     <span
                       key={tag}
                       className="px-2 py-1 text-xs bg-white/10 text-gray-300 rounded-full"
@@ -168,20 +331,37 @@ const Portfolio: React.FC = () => {
             </div>
           ))}
         </div>
+        
+        {/* Audio Element */}
+        <audio 
+          ref={audioRef} 
+          onEnded={() => {
+            setIsPlaying(false);
+            setCurrentlyPlaying(null);
+          }}
+          onError={(e) => {
+            console.error('Erreur audio:', e);
+            setIsPlaying(false);
+            setCurrentlyPlaying(null);
+          }}
+          preload="none"
+        />
       </div>
 
-      {/* Project Modal */}
-      {selectedProject && (
+      {/* Track Modal */}
+      {selectedTrack && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="glass-card rounded-3xl border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="relative">
-              <img
-                src={selectedProject.image}
-                alt={selectedProject.title}
-                className="w-full h-64 object-cover"
-              />
+            <div className="relative h-64 bg-gradient-to-br from-purple-500/30 to-teal-500/30 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-teal-500 rounded-full flex items-center justify-center mb-4 mx-auto">
+                  <Volume2 size={32} className="text-white" />
+                </div>
+                <div className="text-white font-bold text-2xl">{selectedTrack.bpm}</div>
+                <div className="text-gray-300 text-lg">{selectedTrack.key}</div>
+              </div>
               <button
-                onClick={() => setSelectedProject(null)}
+                onClick={() => setSelectedTrack(null)}
                 className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
               >
                 ×
@@ -191,16 +371,16 @@ const Portfolio: React.FC = () => {
             <div className="p-8">
               <div className="flex items-center gap-4 mb-4">
                 <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-400 rounded-full font-semibold">
-                  {selectedProject.category}
+                  {selectedTrack.category}
                 </span>
-                <span className="text-gray-400">{selectedProject.date}</span>
+                <span className="text-gray-400">{selectedTrack.bpm} • {selectedTrack.key}</span>
               </div>
               
-              <h2 className="text-3xl font-bold text-white mb-4">{selectedProject.title}</h2>
-              <p className="text-gray-300 leading-relaxed mb-6">{selectedProject.description}</p>
+              <h2 className="text-3xl font-bold text-white mb-2">{selectedTrack.title}</h2>
+              <p className="text-gray-300 text-lg mb-6">{selectedTrack.artist}</p>
               
               <div className="flex flex-wrap gap-2 mb-6">
-                {selectedProject.tags.map((tag) => (
+                {selectedTrack.tags.map((tag) => (
                   <span
                     key={tag}
                     className="px-3 py-1 text-sm bg-white/10 text-gray-300 rounded-full"
@@ -211,13 +391,22 @@ const Portfolio: React.FC = () => {
               </div>
               
               <div className="flex gap-4">
-                <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-teal-500 rounded-full text-white font-semibold hover:scale-105 transition-transform">
-                  <Play size={20} />
-                  Listen Now
+                <button 
+                  onClick={() => playTrack(selectedTrack)}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-teal-500 rounded-full text-white font-semibold hover:scale-105 transition-transform"
+                >
+                  {currentlyPlaying === selectedTrack.id && isPlaying ? (
+                    <Pause size={20} />
+                  ) : (
+                    <Play size={20} />
+                  )}
+                  {currentlyPlaying === selectedTrack.id && isPlaying ? 'Pause' : 'Play Track'}
                 </button>
-                <button className="flex items-center gap-2 px-6 py-3 glass-card border border-white/20 rounded-full text-white hover:border-white/40 transition-colors">
-                  <ExternalLink size={20} />
-                  External Link
+                <button 
+                  onClick={stopAllTracks}
+                  className="flex items-center gap-2 px-6 py-3 glass-card border border-white/20 rounded-full text-white hover:border-white/40 transition-colors"
+                >
+                  Stop
                 </button>
               </div>
             </div>

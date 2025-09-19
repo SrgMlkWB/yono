@@ -54,7 +54,7 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 glass-card border-b border-white/10 mt-4 w-[calc(100%-20px)] max-w-sm sm:max-w-lg md:w-auto md:max-w-none rounded-full">
+    <nav className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 glass-card border-b border-white/10 mt-4 w-[calc(100%-20px)] max-w-sm sm:max-w-lg md:max-w-4xl rounded-full">
       <div className="px-4 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between md:justify-between h-16">
           {/* Logo */}

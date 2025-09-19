@@ -3,6 +3,25 @@ import { Play, Instagram, Music2, X } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleListenNow = () => {
+    // Scroll vers la section portfolio ou ouvrir le music player
+    const musicPlayer = document.querySelector('[data-music-player]');
+    if (musicPlayer) {
+      // Si le music player existe, on peut le déclencher
+      (musicPlayer as HTMLElement).click();
+    } else {
+      // Sinon on scroll vers le portfolio
+      scrollToSection('portfolio');
+    }
+  };
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -67,12 +86,18 @@ const Hero: React.FC = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="group glass-card px-8 py-4 rounded-full border border-white/20 hover:border-purple-400/50 transition-all duration-300 flex items-center gap-3">
+            <button 
+              onClick={handleListenNow}
+              className="group glass-card px-8 py-4 rounded-full border border-white/20 hover:border-purple-400/50 transition-all duration-300 flex items-center gap-3 hover:scale-105"
+            >
               <Play size={24} className="text-purple-400 group-hover:scale-110 transition-transform" />
               <span className="text-white font-semibold">Listen Now</span>
             </button>
             
-            <button className="glass-card px-8 py-4 rounded-full border border-white/10 hover:border-teal-400/50 transition-all duration-300 text-gray-300 hover:text-white">
+            <button 
+              onClick={() => scrollToSection('portfolio')}
+              className="glass-card px-8 py-4 rounded-full border border-white/10 hover:border-teal-400/50 transition-all duration-300 text-gray-300 hover:text-white hover:scale-105"
+            >
               View Portfolio
             </button>
           </div>

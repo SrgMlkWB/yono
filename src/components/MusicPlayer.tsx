@@ -99,6 +99,7 @@ const MusicPlayer: React.FC = () => {
       {/* Floating Player Toggle */}
       <button
         onClick={() => setIsPlayerOpen(!isPlayerOpen)}
+        data-music-player
         className="fixed bottom-6 right-6 z-50 glass-card p-4 rounded-full border border-white/20 hover:border-purple-400/50 transition-all duration-300 group"
       >
         <Play size={24} className="text-purple-400 group-hover:scale-110 transition-transform" />
